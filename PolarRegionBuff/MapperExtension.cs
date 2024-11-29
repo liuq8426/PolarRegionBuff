@@ -12,7 +12,7 @@ namespace PolarRegionBuff
             {
                 heroDto = new HeroDto
                 {
-                    Name = hero.Name.SplitString(),
+                    Name = hero.Name,
                     WinPercentage = "胜率: " + hero.WinPercentage,
                     CauseDamage = "造成伤害: " + hero.CauseDamage,
                     TakeDamage = "承受伤害: " + hero.TakeDamage,

@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="极地大乱斗BUFF" 
         ResizeMode="NoResize"
-        Height="440"
-        Width="400"
+        Height="600"
+        Width="800"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>

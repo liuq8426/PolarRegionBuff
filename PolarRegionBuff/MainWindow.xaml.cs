@@ -11,8 +11,8 @@ namespace PolarRegionBuff
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<string> HerosName;
-        public List<HeroDto> Heros;
+        public List<string> _herosName;
+        public List<HeroDto> _heros;
 
         public MainWindow()
         {
@@ -24,9 +24,9 @@ namespace PolarRegionBuff
             var heros = await ReadData();
             if (heros is not null)
             {
-                Heros = heros.Map().ToList();
-                HerosName = Heros.Select(hero => hero.Name).ToList();
-                this.heroBox.ItemsSource = HerosName;
+                _heros = heros.Map().ToList();
+                _herosName = _heros.Select(hero => hero.Name).ToList();
+                this.heroBox.ItemsSource = _herosName;
             }
             else
             {
@@ -38,7 +38,7 @@ namespace PolarRegionBuff
         {
             if (heroBox.SelectedItem != null)
             {
-                var hero = Heros.Where(x => x.Name == this.heroBox.Text).SingleOrDefault();
+                var hero = _heros.Where(x => x.Name == this.heroBox.Text).SingleOrDefault();
                 if (hero is not null)
                 {
                     this.herosList.Items.Add(hero.Name);
@@ -63,7 +63,7 @@ namespace PolarRegionBuff
         private void HeroBox_KeyUp(object sender, KeyEventArgs e)
         {
             List<string> heroList = new List<string>();
-            heroList = HerosName.FindAll(x => x.Contains(heroBox.Text.Trim()));
+            heroList = _herosName.FindAll(x => x.Contains(heroBox.Text.Trim()));
             heroBox.ItemsSource = heroList;
             heroBox.IsDropDownOpen = true;
         }
@@ -77,6 +77,7 @@ namespace PolarRegionBuff
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(html);
             var htmldate = document.DocumentNode.SelectNodes("//td").Select(x => x.InnerText).ToList();
+            var htmlName = document.DocumentNode.SelectNodes("//a[@href]//span[1]").Select(x => x.InnerText).ToList();
             var buffList = SplitList(htmldate, 9);
             List<Hero> heros = new List<Hero>();
             foreach (var item in buffList)
@@ -94,6 +95,10 @@ namespace PolarRegionBuff
                     Other = item[8]
                 };
                 heros.Add(hero);
+            }
+            for (int i = 0; i < heros.Count && i < htmlName.Count; i++)
+            {
+                heros[i].Name = htmlName[i];
             }
             return heros;
         }
